@@ -1,0 +1,7 @@
+<%= form_for [@test,@question] do |q| %>
+  <div><%= q.text_area :prob %></div>
+  <div><%= q.file_field :attachment %></div>
+  <div><%= q.text_area :ans %></div>
+  <div><%= q.text_area :explain %></div>
+  <div><%= q.submit "Save problem", :class =>'form-btn' %></div>
+<% end %>

@@ -1,0 +1,33 @@
+<div class="tests">
+<div class="container">
+  <div class="search">
+	<%= form_tag('/test/add') do%>
+	  <%= text_field_tag :search, params[:search] %>
+      <%= submit_tag "add" %>
+	<% end %>
+	<p><%= flash[:error] %></p>
+  </div>
+  <div class="own-test">
+    <% @mytests.each do |test|%>
+	  <h3><%= test.title%></h3>
+		<p>
+		  <%= link_to 'Edit', edit_test_path(test.id) %>
+		  <%= link_to 'Delete', test_path(test), method: :delete%>
+		</p>
+	<% end %> 
+  </div>
+  <%= link_to 'Create Test', :controller=>'tests', :action=>'new' %>
+  <p>====</p>
+  <div class="test">
+	<% @tests.each do |test|%>
+	  <h3><%= test.title%></h3>
+		<p>
+		  <%= link_to 'Show', test_path(test)%>
+		  <%= link_to 'Remove', remove_test_path(test), method: :post %>
+		</p>
+	<% end %>
+  </div>
+</div>
+</div>
+
+

@@ -1,0 +1,15 @@
+<%= form_for(@test) do |t| %>
+  <div><%= t.text_field :title %></div>
+  <%= t.submit "Save title", :class => 'form-btn'%>
+<% end %>
+<%= link_to 'New Questions', new_test_question_path(@test) %>
+<% @questions.each do |q| %>
+	<p><%= q.prob %></p>
+	<%= image_tag q.attachment %>
+	<p><%= q.ans %></p>
+    <p><%= q.explain %></p>
+	<p>
+	  <%=link_to 'Delete', test_question_path(@test,q),method: :delete%>
+	  <%=link_to 'Edit', edit_test_question_path(@test,q) %>
+	</p>
+<% end %>

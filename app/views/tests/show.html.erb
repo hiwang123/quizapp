@@ -1,0 +1,7 @@
+<h3 class="test-title"><%= @test.title %></h3>
+<% @questions.each do |q| %>
+	<p><%= q.prob %></p> 
+    <%= image_tag q.attachment %>
+	<p><%= q.ans %></p>
+    <p><%= q.explain %></p>
+<% end %>
