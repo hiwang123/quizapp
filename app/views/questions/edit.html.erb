@@ -1,7 +1,11 @@
+<div class='container'>
 <%= form_for [@test,@question] do |q| %>
-  <div><%= q.text_area :prob %></div>
+  <div><p>type</p><%= q.select :typ, [['單選',1],['多選',2],['填充',3]] %>
+  <div><p>tag</p><%= q.text_field :tag %></div>
+  <div><p>prob</p><%= q.text_area :prob %></div>
   <div><%= q.file_field :attachment %></div>
-  <div><%= q.text_area :ans %></div>
-  <div><%= q.text_area :explain %></div>
+  <div><p>ans</p><%= q.text_area :ans %></div>
+  <div><p>explain</p><%= q.text_area :explain %></div>
   <div><%= q.submit "Save problem", :class =>'form-btn' %></div>
 <% end %>
+</div>

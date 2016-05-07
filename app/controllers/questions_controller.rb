@@ -40,12 +40,11 @@ class QuestionsController < ApplicationController
 			@question.update(question_params)
 		end
 		redirect_to edit_test_path(@test)
-
 	end
 
 	private
 		def question_params
-			params.require(:question).permit(:prob, :ans, :explain, :attachment)
+			params.require(:question).permit(:tag, :typ, :prob, :ans, :explain, :attachment)
 		end
 		
 		def set_test

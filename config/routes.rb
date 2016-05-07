@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   end
 
   post 'test/add' => 'tests#add'
+  post 'test/record' => 'tests#record'
 
   match ':controller(/:action(/:id(.:format)))', :via => :all
 

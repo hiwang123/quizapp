@@ -2,27 +2,32 @@
 <html>
 <head>
   <title>Quizapp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-<div class='header'>
+<nav class='nav navbar-default'>
 	<div class='container'>
+		<div class='navbar-header'>
+            <%= link_to "Learn Bar", root_path, class: 'navbar-brand' %>
+        </div>
 		<% if current_user %> 
-            <ul> 
-              <li><%= current_user.email %></li> 
-              <li><%= link_to "Log out", logout_path, method: "delete" %></li>
-			  <li><%= link_to "Home", root_path %></li> 
-            </ul> 
+			<div class='navbar-collapse'>
+			  <div class='nav navbar-nav navbar-right'>
+				<p class='navbar-text'>Hello, <%= current_user.name %></p>
+				<%= link_to "Log out", logout_path, method: "delete", class: "btn btn-default navbar-btn" %>
+			  </div>
+			</div> 
         <% else %> 
-            <ul> 
-              <li><%= link_to "Login", 'login' %></a></li> 
-              <li><%= link_to "Signup", 'signup' %></a></li> 
-            </ul> 
+            <div class='navbar-collapse'> 
+              <%= link_to "Login", 'login', class: "btn btn-default navbar-btn" %></a> 
+              <%= link_to "Signup", 'signup', class: "btn btn-default navbar-btn" %></a>
+            </div> 
         <% end %>
 	</div>
-</div>
+</nav>
 <%=yield%>
 </body>
 </html>

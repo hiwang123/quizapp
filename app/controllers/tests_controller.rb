@@ -13,8 +13,8 @@ class TestsController < ApplicationController
 	end
 	
 	def add
-		@test = Test.where("sharecode = ?",params[:search])
-		@mtest = current_user.tests.where("sharecode = ?",params[:search])
+		@test = Test.where(sharecode: params[:search])
+		@mtest = current_user.tests.where(sharecode: params[:search])
 		if @test.empty?
 			flash[:error] = "Code not found"
 		elsif !@mtest.empty?
@@ -26,7 +26,6 @@ class TestsController < ApplicationController
 	end
 
 	def remove
-	#	@test = Test.find(params[:id])
 		@test = Test.where(id: params[:id])
 		current_user.tests.delete(@test)
 		redirect_to :action => :index
@@ -35,7 +34,17 @@ class TestsController < ApplicationController
 	def show
 		@test = Test.find(params[:id])
 		@questions = @test.questions
+		@records = Record.where(uid: current_user.id).where(qid: @questions.ids)
 	end
+
+	def record
+		@test = Test.find(params[:id])
+		@data = JSON.parse(params[:data])
+		@data.each do |d|
+			Record.create(:uid => current_user.id, :qid => d["qid"], :correct => d["correct"])
+		end
+		render :text => test_path(@test)
+	end	
 	
 	def new
 		@test = Test.new

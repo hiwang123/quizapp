@@ -1,5 +1,13 @@
+<div class='container'>
 <%= form_for(@test) do |f| %>
-      <%= f.text_field :title %>
-	  <%= f.text_field :sharecode %>
-      <%= f.submit "Create", :class => "form-btn" %>
+  <ul class='list-inline'>
+	<li><h4>Title</h4></li>
+	<li><%= f.text_field :title, class: 'form-control'%></li>
+  </ul>
+  <ul class='list-inline'>
+	<li><h4>Share Code</h4></li>
+	<li><%= f.text_field :sharecode, class: 'form-control'%></li>
+  </ul>
+  <%= f.submit "Create", :class => "btn btn-default" %>
 <% end %> 
+</div>
