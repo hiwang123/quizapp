@@ -18,7 +18,16 @@
 	<div class='panel-body'>
 	 <div class='tab-content'>
 	  <div class='tab-pane fade' id='1a'>
+		<div id='show0'>
+		  <h4>作答類型</h4>
+		  <div class="btn-group" role="group">
+			  <button type="button" class="btn btn-default xyz" id='yee'>所有試題</button>
+			  <button type="button" class="btn btn-default xyz" id='wrong'>上次錯誤</button>
+			  <button type="button" class="btn btn-default xyz" id='tag'>星號標記</button>
+		  </div>		  
+		</div>
 		<div id='show1'>
+		  <span class='star'>&#x2605;</span>
 		  <h4>試題</h4>
 		  <pre id='prob'></pre> 
 		  <img id='img'>
@@ -33,6 +42,7 @@
 			<label class="checkbox-inline"><input type='checkbox' value='d'>D</label>
 			<label class="checkbox-inline"><input type='checkbox' value='e'>E</label>
 		  </div>
+		  <div><button id='control' class="btn btn-primary"></button></div>
 		</div>
 		<div id='show2'>
 		  <h4>結果</h4> 
@@ -42,7 +52,6 @@
 		  <h4>詳解</h4>
 		  <pre id='explain'></pre>
 		</div>
-		<div><button id='control' class="btn btn-primary"></button></div>
 	  </div>
 
 	  <div class='tab-pane fade in active' id='2a'>
@@ -50,6 +59,11 @@
 		  <% @records.each do |r| %>
 			<%= r.qid %>
 			<%= r.correct %>
+		  <% end %>
+		</div>
+		<div>
+		  <% @wrongs.each do |w| %>
+			<%= w.qid %>
 		  <% end %>
 		</div>
 	  </div>
@@ -73,23 +87,48 @@
 </div>
 <script>
 $(document).ready(function(){
-	//var arr = '<%# Base64.strict_encode64(@questions.to_json(:except => [:created_at, :updated_at])) %>';
+	//var arr = "<%# Base64.strict_encode64(@questions.to_json(:except => [:created_at, :updated_at])) %>";
 	var arr = <%= raw @questions.to_json(:except => [:created_at, :updated_at]) %>;
-	//arr = JSON.parse(atob(arr));
+	//arr = JSON.parse(decodeURIComponent(atob(arr)));
+	var star = qid2arr(<%= raw @tags.to_json(:except => [:id]) %>);
+	var select;
 	var record = [];
 	var now = 0;
 	var flag=true;
+	prepare();
 	show_prob(now);
 	$('#control').click(function(){
-		if(now == arr.length) send_form();
+		if(now == arr.length){
+			 send_form();
+			 return true;
+		}
 		if(flag){
 			show_ans(now, correct(arr[now].typ, arr[now].ans));
-			now += 1;
+			now++;
 		}else{
 			show_prob(now);
 		}
 		flag=!flag;
 	});
+	function prepare(){
+		$('#show1').hide();
+		$('.xyz').click(function(){
+			var arr2 = [];
+			if(this.id == 'wrong' || this.id == 'tag'){
+				select = this.id == 'wrong' ? qid2arr(<%= raw @wrongs.to_json(:except => [:id]) %>) :
+						qid2arr(<%= raw @tags.to_json(:except => [:id]) %>);
+				for(var i in arr)
+                    if(select.indexOf(arr[i]['id']) >= 0) arr2.push(arr[i]);
+				if(arr2.length == 0){
+					alert('此項目為空，請選擇其他');
+					return false;
+				}
+				arr = arr2.slice();
+			}
+			$('#show0').remove();
+			$('#show1').show();
+		});
+	}
 	function correct(type, ans){
 		var checked = [];
 		$('input:checkbox:checked').each(function(){ checked.push(this.value); });
@@ -129,6 +168,8 @@ $(document).ready(function(){
 	}
 	function show_prob(now){
 		$('#show2').hide();
+		if(star.indexOf(arr[now]['id']) < 0) $('.star').removeClass('selected');
+        else $('.star').addClass('selected');
 		$('input:checkbox').removeAttr('checked onClick');
 		$('#explain').text('');
 		$('#result').text('');
@@ -152,5 +193,29 @@ $(document).ready(function(){
 			success: function(r){window.location.reload(true);}
 		});
 	}
+	function qid2arr(obj){
+		var ret=[];
+		for(var i in obj)
+			ret.push(obj[i]['qid']);
+		return ret;
+	}
+	$('.star').click(function(){
+		var result = {};
+		result['qid'] = arr[now]['id'];
+		if($(this).hasClass('selected')){
+			$(this).removeClass('selected');
+			result['tag'] = false;
+		}else{
+			$(this).addClass('selected');
+			result['tag'] = true;
+		}
+		$.post({
+                url: '/test/tag',
+                type: 'POST',
+                data: { data: JSON.stringify(result)},
+                success: function(){}
+        });
+		alert(result['tag'] ? '新增標籤' : '移除標籤');
+	});
 });
 </script>

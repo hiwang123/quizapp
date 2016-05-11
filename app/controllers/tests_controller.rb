@@ -34,16 +34,39 @@ class TestsController < ApplicationController
 	def show
 		@test = Test.find(params[:id])
 		@questions = @test.questions
-		@records = Record.where(uid: current_user.id).where(qid: @questions.ids)
+		@records = Record.where(uid: current_user.id, qid: @questions.ids)
+		@wrongs = Latest.where(uid: current_user.id, qid: @questions.ids).select(:qid)
+		@scores = Score.where(uid: current_user.id, tid: @test.id)	
+		@tags = Tag.where(uid: current_user.id, qid: @questions.ids).select(:qid)
+	end
+
+	def tag
+		data = JSON.parse(params[:data])
+		tag = Tag.where(uid: current_user.id, qid: data["qid"])
+		if data["tag"] and tag.empty?
+			Tag.create(:uid => current_user.id, :qid => data["qid"])
+		elsif not data["tag"] and not tag.empty?
+			tag.destroy_all
+		end
+		render :text => 'success'
 	end
 
 	def record
 		@test = Test.find(params[:id])
 		@data = JSON.parse(params[:data])
+		correct = 0.0
 		@data.each do |d|
 			Record.create(:uid => current_user.id, :qid => d["qid"], :correct => d["correct"])
+			correct += d["correct"] ? 1 : 0
+			last = Latest.where(uid: current_user.id, qid: d["qid"])
+			if not d["correct"] and last.empty?
+				Latest.create(:uid => current_user.id, qid: d["qid"])
+			elsif d["correct"] and not last.empty?
+				last.destroy_all
+			end
 		end
-		render :text => test_path(@test)
+		Score.create(:uid => current_user.id, :tid => @test.id, :grade => correct/@data.count)
+		render :text => 'success'
 	end	
 	
 	def new
