@@ -3,10 +3,35 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .star{
+	font-size: 200%;
 	color: gray;
 	cursor: pointer;
 }
 .star.selected{
 	color: orange;
 }
+path {
+	stroke: #58CA6A;
+	stroke-width: 2;
+	fill: none;
+}
 
+.axis {
+  shape-rendering: crispEdges;
+}
+.x.axis line {
+  stroke: lightgrey;
+}
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+.x.axis path {
+ stroke: #000; 
+}
+.x.axis text{
+	display: none;
+}
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #000;
+}

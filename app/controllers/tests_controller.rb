@@ -34,10 +34,25 @@ class TestsController < ApplicationController
 	def show
 		@test = Test.find(params[:id])
 		@questions = @test.questions
-		@records = Record.where(uid: current_user.id, qid: @questions.ids)
 		@wrongs = Latest.where(uid: current_user.id, qid: @questions.ids).select(:qid)
 		@scores = Score.where(uid: current_user.id, tid: @test.id)	
 		@tags = Tag.where(uid: current_user.id, qid: @questions.ids).select(:qid)
+		@statics = Array.new(4){Hash.new}
+		records = Record.where(uid: current_user.id, qid: @questions.ids)
+		last = Record.where(uid: current_user.id, qid: @questions.ids).order("created_at").last
+		records.each do |r|
+			q = Question.find(r.qid).tag
+			if r.correct and r.created_at == last.created_at
+				make_statics(@statics[3], q)
+				make_statics(@statics[2], q)
+				make_statics(@statics[1], q)
+			elsif r.created_at == last.created_at
+				make_statics(@statics[2], q)
+			elsif r.correct
+				make_statics(@statics[1], q)
+			end
+			make_statics(@statics[0], q)
+		end
 	end
 
 	def tag
@@ -74,14 +89,21 @@ class TestsController < ApplicationController
 	end
 
 	def create
-		@test = Test.new(test_params)
-		@test.user_id = current_user.id
-		if @test.save
-			current_user.tests << @test
-			redirect_to edit_test_path(@test)
-		else
+		if test_params[:sharecode].blank? or test_params[:title].blank?
+			flash[:error] = "Title or Sharecode error"
 			redirect_to :action => :new
-			#todo : add err msg sharecode rep
+		elsif not Test.where(sharecode: test_params[:sharecode]).empty?
+			flash[:error] = "Sharecode already appeared, try another"
+			redirect_to :action => :new
+		else
+			@test = Test.new(test_params)
+			@test.user_id = current_user.id
+			if @test.save
+				current_user.tests << @test
+				redirect_to edit_test_path(@test)
+			else
+				redirect_to :action => :new
+			end
 		end
 	end
 
@@ -106,6 +128,14 @@ class TestsController < ApplicationController
 	private
 		def test_params
 			params.require(:test).permit(:title, :sharecode)
+		end
+
+		def make_statics(static, q)
+			if static.has_key?(q)
+                static[q] += 1
+            else
+                static[q] = 1
+            end
 		end
 
 end

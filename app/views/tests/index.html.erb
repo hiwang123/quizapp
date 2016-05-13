@@ -5,7 +5,9 @@
 	    <%= text_field_tag :search, params[:search], class: "form-control" %>
         <%= submit_tag "add", class: 'btn btn-default' %>
 	  <% end %>
-	  <p><%= flash[:error] %></p>
+	  <% flash.each do |key, value|%>
+		<div class='alert alert-warning'><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><%= value %></div>
+	  <% end %>
   <ul class="list-inline panel panel-default">
     <% @mytests.each do |test|%>
 	  <li>
