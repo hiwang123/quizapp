@@ -8,7 +8,8 @@ class SessionsController < ApplicationController
 			session[:user_id] = @user.id
 			redirect_to '/'
 		else
-			redirect_to 'login'
+			flash[:error] = 'Username or Password error'
+			redirect_to :action => :create
 		end 
 	end
 

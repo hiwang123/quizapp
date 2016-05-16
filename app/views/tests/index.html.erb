@@ -1,5 +1,6 @@
 <div class="tests">
 <div class="container">
+  <div class='form-group'>
 	  <%= form_tag('/test/add', class: 'form-inline') do%>
 		<label>Share Code: </label>
 	    <%= text_field_tag :search, params[:search], class: "form-control" %>
@@ -8,6 +9,9 @@
 	  <% flash.each do |key, value|%>
 		<div class='alert alert-warning'><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><%= value %></div>
 	  <% end %>
+  </div>
+  <label>我的題庫</label>
+  <%= link_to 'Create Test', {:controller=>'tests', :action=>'new'}, class:"btn btn-default" %>
   <ul class="list-inline panel panel-default">
     <% @mytests.each do |test|%>
 	  <li>
@@ -17,8 +21,8 @@
 	  </li>
 	<% end %> 
   </ul>
-  <%= link_to 'Create Test', {:controller=>'tests', :action=>'new'}, class:"btn btn-default" %>
-  <p>====</p>
+  <br>
+  <label>進行測驗</label>
   <ul class="list-inline panel panel-default">
 	<% @tests.each do |test|%>
 	  <li>	

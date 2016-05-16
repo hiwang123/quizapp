@@ -22,14 +22,15 @@ ActiveRecord::Schema.define(version: 20160511012022) do
 
   create_table "questions", force: :cascade do |t|
     t.text     "prob"
-    t.string   "attachment"
+    t.string   "attachment1"
+    t.string   "attachment2"
     t.string   "tag"
     t.integer  "typ"
     t.text     "ans"
     t.text     "explain"
     t.integer  "test_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "records", force: :cascade do |t|

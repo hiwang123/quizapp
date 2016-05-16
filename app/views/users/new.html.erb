@@ -1,16 +1,18 @@
 <div class="login">
   <div class="container">
-    <div class="form">
+    
 
     <h1>Sign up</h1>
 
-    <%= form_for(@user) do |f| %>
-      <%= f.text_field :name, :placeholder => "Name" %>
-      <%= f.email_field :email, :placeholder => "Email" %>
-      <%= f.password_field :password, :placeholder => "Password" %>
-      <%= f.submit "Create an account", class: "btn-submit" %>
+    <%= form_for @user, :html => {:class => 'form-inline'} do |f| %>
+      <%= f.text_field :name, :placeholder => "Name", class: 'form-control' %>
+      <%= f.email_field :email, :placeholder => "Email", class: 'form-control' %>
+      <%= f.password_field :password, :placeholder => "Password", class: 'form-control' %>
+      <%= f.submit "Create an account", class: "btn btn-primary" %>
     <% end %>
-  
-    </div>
+	<% flash.each do |key, value|%> 
+		<div class='alert alert-danger'><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><%= value %></div>
+	<% end %> 
+    
   </div>
 </div>

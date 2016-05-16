@@ -39,14 +39,14 @@ class TestsController < ApplicationController
 		@tags = Tag.where(uid: current_user.id, qid: @questions.ids).select(:qid)
 		@statics = Array.new(4){Hash.new}
 		records = Record.where(uid: current_user.id, qid: @questions.ids)
-		last = Record.where(uid: current_user.id, qid: @questions.ids).order("created_at").last
+		@last = Record.where(uid: current_user.id, qid: @questions.ids).order("created_at").last
 		records.each do |r|
 			q = Question.find(r.qid).tag
-			if r.correct and r.created_at == last.created_at
+			if r.correct and r.created_at.to_i == @last.created_at.to_i
 				make_statics(@statics[3], q)
 				make_statics(@statics[2], q)
 				make_statics(@statics[1], q)
-			elsif r.created_at == last.created_at
+			elsif r.created_at.to_i == @last.created_at.to_i
 				make_statics(@statics[2], q)
 			elsif r.correct
 				make_statics(@statics[1], q)

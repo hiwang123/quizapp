@@ -17,9 +17,11 @@
 		<% @questions.each do |q| %>
 		  <tr><td>
 			<pre><%= q.prob %></pre>
-			<%= image_tag q.attachment %>
+			<%= image_tag q.attachment1 %>
 			<pre><%= q.ans %></pre>
 			<pre><%= q.explain %></pre>
+			<%= image_tag q.attachment2 %>
+			<div class='form-group'></div>
 			<ul class='list-inline'>
 				<li><%=link_to 'Edit', edit_test_question_path(@test,q), class: 'btn btn-primary' %></li>
 				<li>[<%=link_to 'Delete', test_question_path(@test,q),method: :delete %>]</li>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Quizapp</title>
+  <title>Learning Bar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
@@ -12,7 +12,7 @@
 <nav class='nav navbar-default'>
 	<div class='container'>
 		<div class='navbar-header'>
-            <%= link_to "Learn Bar", root_path, class: 'navbar-brand' %>
+            <%= link_to "Learning Bar", root_path, class: 'navbar-brand' %>
         </div>
 		<% if current_user %> 
 			<div class='navbar-collapse'>
@@ -29,6 +29,7 @@
         <% end %>
 	</div>
 </nav>
+<div class='form-group'></div>
 <%=yield%>
 </body>
 </html>

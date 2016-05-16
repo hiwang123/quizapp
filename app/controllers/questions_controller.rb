@@ -44,7 +44,7 @@ class QuestionsController < ApplicationController
 
 	private
 		def question_params
-			params.require(:question).permit(:tag, :typ, :prob, :ans, :explain, :attachment)
+			params.require(:question).permit(:tag, :typ, :prob, :ans, :explain, :attachment1, :attachment2)
 		end
 		
 		def set_test

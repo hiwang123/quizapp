@@ -30,7 +30,7 @@
 		  <span class='star'>&#x2605;</span>
 		  <h4>試題</h4>
 		  <pre id='prob'></pre> 
-		  <img id='img'>
+		  <img id='img1'>
 		  <h4>作答</h4>
 		  <div id='fill'>
 			  <input type='text'>
@@ -51,17 +51,15 @@
 		  <pre id='ans'></pre>
 		  <h4>詳解</h4>
 		  <pre id='explain'></pre>
+		  <img id='img2'>
 		</div>
 	  </div>
 
 	  <div class='tab-pane fade in active' id='2a'>
+		<h4>總成績</h4>
 		<div id='lgraph'></div>
-		<div id='pgraph'></div>
-		<div>
-		  <% @statics.each do |s| %>
-			<%= s %>
-		  <% end %>
-		</div>
+		<h4>類型正確率</h4>
+		<div id='rgraph'></div>
 	  </div>
   
 	  <div class='tab-pane fade' id='3a'>
@@ -70,7 +68,7 @@
 		   <tr><td>
 			<h4>試題</h4>
 			<pre><%= q.prob%></pre>
-			<%=image_tag q.attachment%>
+			<%=image_tag q.attachment1%>
 			<h4>答案</h4>
 			<pre><%= q.ans%></pre>
 		   </td></tr>
@@ -122,6 +120,11 @@ $(document).ready(function(){
 					return false;
 				}
 				arr = arr2.slice();
+			}else{
+				if(arr.length == 0){
+					alert('此項目為空，請選擇其他');
+                    return false;
+				}
 			}
 			$('#show0').remove();
 			$('#show1').show();
@@ -163,6 +166,7 @@ $(document).ready(function(){
 		$('#show2').show();
 		$('#ans').text(arr[now].ans);
 		$('#explain').text(arr[now].explain);
+		$('#img2').attr('src',arr[now].attachment2.url);
 		$('#result').text(result ? 'Correct':'False');
 		$('#control').text("Next");
 		$('input:checkbox').attr('onClick','return false');
@@ -176,7 +180,7 @@ $(document).ready(function(){
 		$('#explain').text('');
 		$('#result').text('');
 		$('#prob').text(arr[now].prob);
-		$('#img').attr('src',arr[now].attachment.url);
+		$('#img1').attr('src',arr[now].attachment1.url);
 		if(arr[now].typ==3){
 			$('#fill').show();
 			$('#choice').hide();
@@ -228,12 +232,14 @@ $(document).ready(function(){
 	var width = 500 - margin.left - margin.right;
 	var height = 300 - margin.top - margin.bottom;
 
-	var x = d3.scale.linear().domain([0, data.length]).range([0, width]);
+	var x = d3.scale.linear().domain([-1, data.length-1]).range([0, width]);
 	var y = d3.scale.linear().domain([0, 100]).range([height, 0]);
-	var xAxis = d3.svg.axis().scale(x).orient("bottom");
+	var xAxis = d3.svg.axis().scale(x).ticks(data.length).orient("bottom");
 	var yAxis = d3.svg.axis().scale(y).tickValues([0,25,50,75,100]).orient("left");
 	var line = d3.svg.line().x(function(d,i){ return x(i); })
 							.y(function(d){ return y(d); });
+	function xx(d,i) { return x(i); };
+	function yy(d) { return y(d); };
 	var graph = d3.select("#lgraph").append("svg:svg")
 			      .attr("width", width + margin.left + margin.right)
 			      .attr("height", height + margin.top + margin.bottom)
@@ -247,6 +253,10 @@ $(document).ready(function(){
 			      .attr("class", "x axis")
 			      .attr("transform", "translate(0," + height +")")
 			      .call(xAxis);
+	graph.selectAll("circle").data(data)
+				  .enter().append("circle")
+				  .attr("cx", xx)
+				  .attr("cy", yy);
 	graph.append("svg:path").attr("d", line(data));
 	function name2arr(obj, name){
 		var ret = [];
@@ -258,23 +268,23 @@ $(document).ready(function(){
 
 <script>
 var colorscale = d3.scale.category10();
-var legendOptions = ['Legend 1'];
-var json = [
-        [
-            {"axis":"A","value":6},
-            {"axis":"B","value":4},
-            {"axis":"C","value":6},
-            {"axis":"D","value":5.5},
-            {"axis":"E","value":8},
-            {"axis":"F","value":7},
-            {"axis":"G","value":9},
-            {"axis":"H","value":10},
-            {"axis":"I","value":3.5}
-        ]
-    ];
+var legendOptions = ['total','latest'];
+var json = <%= raw @statics.to_json() %>;
+var stat=[];
+stat[0] = parsejson(json[0], json[1]);
+stat[1] = parsejson(json[2], json[3]);
+
+function parsejson(data1, data2){
+	var ret = [];
+	for(var x in data1){
+		ret.push({'axis': x, 'value': (data2.hasOwnProperty(x) ? data2[x]:0)/data1[x]});
+	}
+	return ret;
+}
 
 function drawRadarCharts() {
-    drawRadarChart('#pgraph', 300, 300);
+	if(stat[0].length == 0 && stat[1].length == 0) return ;
+    drawRadarChart('#rgraph', 250, 250);
 };
 
 function drawRadarChart(divId, w, h) {
@@ -522,13 +532,13 @@ function drawRadarChart(divId, w, h) {
         ,showVertices: true
     };
     
-    RadarChart.draw(divId, json, myOptions);
+    RadarChart.draw(divId, stat, myOptions);
     
     ////////////////////////////////////////////
     /////////// Initiate legend ////////////////
     ////////////////////////////////////////////
     
-    var svg = d3.select('#chart-radar')
+    var svg = d3.select(divId)
     .selectAll('svg')
     .append('svg')
     .attr("width", w+300)
