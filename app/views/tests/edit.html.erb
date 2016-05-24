@@ -24,7 +24,7 @@
 			<div class='form-group'></div>
 			<ul class='list-inline'>
 				<li><%=link_to '編輯', edit_test_question_path(@test,q), class: 'btn btn-primary' %></li>
-				<li>[<%=link_to '刪除', test_question_path(@test,q),method: :delete %>]</li>
+				<li>[<%=link_to '刪除', test_question_path(@test,q),method: :delete, data: {confirm: "確定要刪除嗎"} %>]</li>
 			</ul>
 		  </td></tr>
 		<% end %>

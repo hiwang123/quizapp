@@ -17,7 +17,7 @@
 	  <li>
 	    <h4><%= test.title%></h4>
 	    <%= link_to '編輯', edit_test_path(test.id), class:'btn btn-primary' %>
-	    <p>[<%= link_to '刪除', test_path(test), method: :delete%>]</p>
+	    <p>[<%= link_to '刪除', test_path(test), method: :delete, data: {confirm: "確定要刪除嗎"}%>]</p>
 	  </li>
 	<% end %> 
   </ul>
@@ -28,7 +28,7 @@
 	  <li>	
 		<h4><%= test.title%></h4>
 		<%= link_to '測驗', test_path(test), class:"btn btn-info"%>
-		<p>[<%= link_to '移除', remove_test_path(test), method: :post %>]</p>
+		<p>[<%= link_to '移除', remove_test_path(test), method: :post, data: {confirm: "移除後可重新加入, 統計資料不會刪除"} %>]</p>
 	  </li>
 	<% end %>
   </ul>
