@@ -2,22 +2,22 @@
 <div class="container">
   <div class='form-group'>
 	  <%= form_tag('/test/add', class: 'form-inline') do%>
-		<label>Share Code: </label>
+		<label>分享代碼 : </label>
 	    <%= text_field_tag :search, params[:search], class: "form-control" %>
-        <%= submit_tag "add", class: 'btn btn-default' %>
+        <%= submit_tag "新增", class: 'btn btn-default' %>
 	  <% end %>
 	  <% flash.each do |key, value|%>
 		<div class='alert alert-warning'><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><%= value %></div>
 	  <% end %>
   </div>
   <label>我的題庫</label>
-  <%= link_to 'Create Test', {:controller=>'tests', :action=>'new'}, class:"btn btn-default" %>
+  <%= link_to '建立新題庫', {:controller=>'tests', :action=>'new'}, class:"btn btn-default" %>
   <ul class="list-inline panel panel-default">
     <% @mytests.each do |test|%>
 	  <li>
 	    <h4><%= test.title%></h4>
-	    <%= link_to 'Edit', edit_test_path(test.id), class:'btn btn-primary' %>
-	    <p>[<%= link_to 'Delete', test_path(test), method: :delete%>]</p>
+	    <%= link_to '編輯', edit_test_path(test.id), class:'btn btn-primary' %>
+	    <p>[<%= link_to '刪除', test_path(test), method: :delete%>]</p>
 	  </li>
 	<% end %> 
   </ul>
@@ -27,8 +27,8 @@
 	<% @tests.each do |test|%>
 	  <li>	
 		<h4><%= test.title%></h4>
-		<%= link_to 'Show', test_path(test), class:"btn btn-info"%>
-		<p>[<%= link_to 'Remove', remove_test_path(test), method: :post %>]</p>
+		<%= link_to '測驗', test_path(test), class:"btn btn-info"%>
+		<p>[<%= link_to '移除', remove_test_path(test), method: :post %>]</p>
 	  </li>
 	<% end %>
   </ul>

@@ -3,10 +3,10 @@
   <div class="panel with-nav-tabs panel-default">
 	<div class="panel-heading">
 	  <ul class="nav nav-tabs">
-		<li>
+		<li class='active'>
 		  <a href='#1a' data-toggle='tab'>測驗</a>
 		</li>
-		<li class='active'>
+		<li>
 		  <a href='#2a' data-toggle='tab'>分析</a>
 		</li>
 		<li>
@@ -17,32 +17,47 @@
 
 	<div class='panel-body'>
 	 <div class='tab-content'>
-	  <div class='tab-pane fade' id='1a'>
+	  <div class='tab-pane fade in active' id='1a'>
 		<div id='show0'>
-		  <h4>作答類型</h4>
+		  <h4 style='color:#666;'>作答形式</h4>
+		  <div style='font-size:1.2em;'>
+			<label class="radio-inline"><input type='radio' name='df' value='norm' checked>按照題號</label>
+			<label class="radio-inline"><input type='radio' name='df' value='rand'>隨機出題</label>
+		  </div><br>
+		  <h4 style='color:#666;'>作答範圍</h4>
+		  <div style='font-size:1.2em;'>
+			<label class="checkbox-inline"><input type='checkbox' name='dr' value='wrong'>上次做錯</label>
+            <label class="checkbox-inline"><input type='checkbox' name='dr' value='star'>星號標記</label>
+		  </div>  
 		  <div class="btn-group" role="group">
-			  <button type="button" class="btn btn-success xyz" id='yee'>所有試題</button>
-			  <button type="button" class="btn btn-danger xyz" id='wrong'>上次錯誤</button>
-			  <button type="button" class="btn btn-warning xyz" id='tag'>星號標記</button>
-		  </div>		  
+              <div class='form-group'></div><button type="button" class="btn btn-success xyz">開始作答</button>
+          </div>
+		  <p style='margin-top:10px;'>[<label onclick='alert("在作答尚未全部完成前若是按「上一頁」、「重新整理」或「關閉網頁」將會喪失目前作答進度，請多加注意")'><a style='cursor:pointer; padding:10px;'>小提醒</a></label>]</p>
 		</div>
 		<div id='show1'>
-		  <span class='star'>&#x2605;</span>
-		  <h4>試題</h4>
+		  <span class="star icon-star"></span>
+		  <h4>(<span id='test_id'></span>) 試題</h4>
 		  <pre id='prob'></pre> 
 		  <img id='img1'>
 		  <h4>作答</h4>
-		  <div id='fill'>
+		  <div id='fill' class='ansblock'>
 			  <input type='text'>
 		  </div>
-		  <div id='choice'>
-			<label class="checkbox-inline"><input type='checkbox' value='a'>A</label>
-			<label class="checkbox-inline"><input type='checkbox' value='b'>B</label>
-			<label class="checkbox-inline"><input type='checkbox' value='c'>C</label>
-			<label class="checkbox-inline"><input type='checkbox' value='d'>D</label>
-			<label class="checkbox-inline"><input type='checkbox' value='e'>E</label>
+		  <div id='mchoice' class='ansblock' style='font-size:1.3em;'>
+			<label class="checkbox-inline"><input type='checkbox' name='m' value='a'>A</label>
+			<label class="checkbox-inline"><input type='checkbox' name='m' value='b'>B</label>
+			<label class="checkbox-inline"><input type='checkbox' name='m' value='c'>C</label>
+			<label class="checkbox-inline"><input type='checkbox' name='m' value='d'>D</label>
+			<label class="checkbox-inline"><input type='checkbox' name='m' value='e'>E</label>
 		  </div>
-		  <div><button id='control' class="btn btn-primary"></button></div>
+		  <div id='schoice' class='ansblock' style='font-size:1.3em;'>
+			<label class="radio-inline"><input type='radio' name='s'  value='a'>A</label>
+            <label class="radio-inline"><input type='radio' name='s' value='b'>B</label>
+            <label class="radio-inline"><input type='radio' name='s' value='c'>C</label>
+            <label class="radio-inline"><input type='radio' name='s' value='d'>D</label>
+            <label class="radio-inline"><input type='radio' name='s' value='e'>E</label>
+		  </div>
+		  <div><div class='form-group'></div><button id='control' class="btn btn-primary"></button><img id='res_icon'></div>
 		</div>
 		<div id='show2'>
 		  <h4>結果</h4> 
@@ -55,8 +70,11 @@
 		</div>
 	  </div>
 
-	  <div class='tab-pane fade in active' id='2a'>
+	  <div class='tab-pane fade' id='2a'>
 		<h4>總成績</h4>
+		<p>&nbsp;最新測驗結果
+		<br>&nbsp;正確率: <span id='latest_score'></span>%
+		<br>&nbsp;正確題庫/總題數: <span id='latest_score2'></span></p>
 		<div id='lgraph'></div>
 		<h4>類型正確率</h4>
 		<div id='rgraph'></div>
@@ -64,13 +82,21 @@
   
 	  <div class='tab-pane fade' id='3a'>
 		<table class='table'>
-		  <% @questions.each do |q| %>
+		  <% @questions.each_with_index do |q, index| %>
 		   <tr><td>
-			<h4>試題</h4>
-			<pre><%= q.prob%></pre>
-			<%=image_tag q.attachment1%>
+			<div>	
+				<h4><%= index+1 %>. 試題</h4>
+				<p> 分類: <span><%= q.tag%><span><p>
+				<pre><%= q.prob%></pre>
+				<%=image_tag q.attachment1%>
+			</div>
 			<h4>答案</h4>
 			<pre><%= q.ans%></pre>
+			<div>
+				<h4>詳解 [<a class='explain' style='cursor:pointer;'>expand</a>]</h4>
+				<div class='hide'><pre><%= q.explain%></pre>
+				<%=image_tag q.attachment2%></div>
+			</div>
 		   </td></tr>
 		  <% end %>
 		</table>
@@ -85,7 +111,7 @@ $(document).ready(function(){
 	var arr = <%= raw @questions.to_json(:except => [:created_at, :updated_at]) %>;
 	//arr = JSON.parse(decodeURIComponent(atob(arr)));
 	var star = qid2arr(<%= raw @tags.to_json(:except => [:id]) %>);
-	var select;
+	var wrong = qid2arr(<%= raw @wrongs.to_json(:except => [:id]) %>);
 	var record = [];
 	var now = 0;
 	var proper = false;
@@ -94,8 +120,9 @@ $(document).ready(function(){
 	$('#control').click(function(){
 		if(!proper) return false;
 		if(now == arr.length){
-			 send_form();
-			 return true;
+			alert_result();
+			send_form();
+			return true;
 		}
 		if(flag){
 			show_ans(now, correct(arr[now].typ, arr[now].ans));
@@ -108,24 +135,24 @@ $(document).ready(function(){
 	function prepare(){
 		$('#show1').hide();
 		$('#show2').hide();
+		if(wrong.length == 0) $('input[name="dr"][value="wrong"]').attr('disabled', true);
+		if(star.length == 0) $('input[name="dr"][value="star"]').attr('disabled', true);
 		$('.xyz').click(function(){
 			var arr2 = [];
-			if(this.id == 'wrong' || this.id == 'tag'){
-				select = this.id == 'wrong' ? qid2arr(<%= raw @wrongs.to_json(:except => [:id]) %>) :
-						qid2arr(<%= raw @tags.to_json(:except => [:id]) %>);
+			var select = [];
+			if($('input[name="dr"][value="wrong"]').is(':checked')) select = $.merge(select, wrong);
+			if($('input[name="dr"][value="star"]').is(':checked')) select = $.merge(select, star);
+			select = $.unique(select);
+			if(select.length != 0){
 				for(var i in arr)
                     if(select.indexOf(arr[i]['id']) >= 0) arr2.push(arr[i]);
-				if(arr2.length == 0){
-					alert('此項目為空，請選擇其他');
-					return false;
-				}
-				arr = arr2.slice();
-			}else{
-				if(arr.length == 0){
-					alert('此項目為空，請選擇其他');
-                    return false;
-				}
+				arr = arr2.slice(); 
 			}
+			if(arr.length == 0){
+                alert('此題庫為空，請選擇其他');
+                return false;
+            }
+			if($('input[name="df"][value="rand"]').is(':checked')) arr = $.randomize(arr);
 			$('#show0').remove();
 			$('#show1').show();
 			proper = true;
@@ -134,9 +161,9 @@ $(document).ready(function(){
 	}
 	function correct(type, ans){
 		var checked = [];
-		$('input:checkbox:checked').each(function(){ checked.push(this.value); });
 		switch(type){
 			case 1:
+				$('input[name="s"]:checked').each(function(){ checked.push(this.value); });
 				ans = ans.toLowerCase().replace(' ','').split('');
 				for(var i in checked)
 					if(ans.indexOf(checked[i]) < 0) return false;
@@ -145,6 +172,7 @@ $(document).ready(function(){
 				return false;
 				break;
 			case 2:
+				$('input[name="m"]:checked').each(function(){ checked.push(this.value); });
 				ans = ans.toLowerCase().replace(' ','').split('');
 				console.log(checked);
 				console.log(ans);
@@ -167,26 +195,33 @@ $(document).ready(function(){
 		$('#ans').text(arr[now].ans);
 		$('#explain').text(arr[now].explain);
 		$('#img2').attr('src',arr[now].attachment2.url);
-		$('#result').text(result ? 'Correct':'False');
+		$('#result').text(result ? '正確':'錯誤');
 		$('#control').text("Next");
-		$('input:checkbox').attr('onClick','return false');
+		$('#res_icon').show();
+		$('#res_icon').attr({src: result ? '/images/correct.png' : '/images/wrong.png'});
+		$('input:checkbox').attr('disabled', true);
+		$('input:radio').attr('disabled', true);
 		record.push({'qid':arr[now].id, 'correct':result});
 	}
 	function show_prob(now){
 		$('#show2').hide();
 		if(star.indexOf(arr[now]['id']) < 0) $('.star').removeClass('selected');
         else $('.star').addClass('selected');
-		$('input:checkbox').removeAttr('checked onClick');
+		$('#test_id').text(now+1+'/'+arr.length);
+		$('input:checkbox').removeAttr('checked disabled');
+		$('input:radio').removeAttr('checked disabled');
 		$('#explain').text('');
 		$('#result').text('');
+		$('#res_icon').hide();
 		$('#prob').text(arr[now].prob);
 		$('#img1').attr('src',arr[now].attachment1.url);
-		if(arr[now].typ==3){
-			$('#fill').show();
-			$('#choice').hide();
+		$('.ansblock').hide();
+		if(arr[now].typ==1){
+			$('#schoice').show();
+		}else if(arr[now].typ==2){
+			$('#mchoice').show();
 		}else{
-			$('#fill').hide();
-			$('#choice').show();
+			$('#fill').show();
 		}
 		$('#control').text("Submit");
 	}
@@ -199,12 +234,24 @@ $(document).ready(function(){
 			success: function(r){window.location.reload(true);}
 		});
 	}
+	function alert_result(){
+		var yy = 0;
+		for(var i in record){
+			if(record[i].correct) yy += 1;
+		}
+		alert('本次正確率:'+yy+'/'+record.length+'('+Math.floor(yy*100/record.length)+'%)\n'+'點分析看詳細結果');
+	}
 	function qid2arr(obj){
 		var ret=[];
 		for(var i in obj)
 			ret.push(obj[i]['qid']);
 		return ret;
 	}
+	$.randomize = function(arr) {
+		for(var j, x, i = arr.length; i; j = parseInt(Math.random() * i), x = arr[--i], arr[i] = arr[j], arr[j] = x);
+		return arr;
+	};
+
 	$('.star').click(function(){
 		var result = {};
 		result['qid'] = arr[now]['id'];
@@ -223,22 +270,39 @@ $(document).ready(function(){
         });
 		alert(result['tag'] ? '新增星號' : '移除星號');
 	});
+	$('.explain').click(function(){
+		var expl = $(this).parent().parent().children('div');
+		console.log(expl);
+		if(expl.hasClass('hide')){
+			expl.removeClass('hide');
+			$(this).text('close');
+		}
+		else{
+			expl.addClass('hide');
+			$(this).text('expand');
+		}
+	});
 });
 </script>
 <script>
 	var data = <%= raw @scores.to_json(:only => [:grade]) %>;
 	data = name2arr(data, 'grade');
-	var margin = {top: 20, right: 100, bottom: 50, left: 50};
-	var width = 500 - margin.left - margin.right;
-	var height = 300 - margin.top - margin.bottom;
+//////////////stupid stat///////////////////
+	$('#latest_score').text(data[data.length-1]);
+	if(data.length == 0) alert('在作答尚未全部完成前若是按「上一頁」、「重新整理」或「關閉網頁」將會喪失目前作答進度，請多加注意');
+////////////////////////////////////////////
+	var margin = {top: 20, right: 50, bottom: 50, left: 50};
+	var maxwidth = Math.min($('.panel').width(), 500);
+	var width = maxwidth - margin.left - margin.right;
+	var height = maxwidth*0.6 - margin.top - margin.bottom;
 
-	var x = d3.scale.linear().domain([-1, data.length-1]).range([0, width]);
+	var x = d3.scale.linear().domain([0, data.length]).range([0, width]);
 	var y = d3.scale.linear().domain([0, 100]).range([height, 0]);
-	var xAxis = d3.svg.axis().scale(x).ticks(data.length).orient("bottom");
+	var xAxis = d3.svg.axis().scale(x).tickValues(d3.range(1,data.length,2)).orient("bottom");
 	var yAxis = d3.svg.axis().scale(y).tickValues([0,25,50,75,100]).orient("left");
-	var line = d3.svg.line().x(function(d,i){ return x(i); })
+	var line = d3.svg.line().x(function(d,i){ return x(i+1); })
 							.y(function(d){ return y(d); });
-	function xx(d,i) { return x(i); };
+	function xx(d,i) { return x(i+1); };
 	function yy(d) { return y(d); };
 	var graph = d3.select("#lgraph").append("svg:svg")
 			      .attr("width", width + margin.left + margin.right)
@@ -255,6 +319,7 @@ $(document).ready(function(){
 			      .call(xAxis);
 	graph.selectAll("circle").data(data)
 				  .enter().append("circle")
+				  .attr("r", 4)
 				  .attr("cx", xx)
 				  .attr("cy", yy);
 	graph.append("svg:path").attr("d", line(data));
@@ -281,15 +346,25 @@ function parsejson(data1, data2){
 	}
 	return ret;
 }
+///////// stupid stat/////////////
+var ltot=0, lcorr=0
+for(var x in json[2])
+	ltot += json[2][x];
+for(var x in json[3])
+	lcorr += json[3][x];
+$('#latest_score2').text(lcorr+'/'+ltot);
+//////////////////////////////////
+	
 
 function drawRadarCharts() {
 	if(stat[0].length == 0 && stat[1].length == 0) return ;
-    drawRadarChart('#rgraph', 250, 250);
+	var maxwidth = Math.min($('.panel').width()-170, 300);
+    drawRadarChart('#rgraph', maxwidth, maxwidth);
 };
 
 function drawRadarChart(divId, w, h) {
     var textSizeLevels = "10px !important";
-    var textSizeTooltip = "13px !important";
+    var textSizeTooltip = "11px !important";
     var textSizeLegend = "11px !important";
     var circleSize = 5;
     var strokeWidthPolygon = "2px";
@@ -307,9 +382,9 @@ function drawRadarChart(divId, w, h) {
                 radians: 2 * Math.PI,
                 opacityArea: 0.001,
                 ToRight: 5,
-                TranslateX: 80,
+                TranslateX: 70,
                 TranslateY: 30,
-                ExtraWidthX: 10,
+                ExtraWidthX: 5,
                 ExtraWidthY: 100,
                 color: d3.scale.category10()
             };
@@ -322,8 +397,8 @@ function drawRadarChart(divId, w, h) {
                 }
             }
             
-            cfg.maxValue = Math.max(cfg.maxValue, d3.max(data, function(i){return d3.max(i.map(function(o){return o.value;}));}));
-            var allAxis = (data[0].map(function(i, j){return i.axis;}));
+            cfg.maxValue = 1.0;
+			var allAxis = (data[0].map(function(i, j){return i.axis;}));
             var total = allAxis.length;
             var radius = cfg.factor*Math.min(cfg.w/2, cfg.h/2);
             d3.select(id)
@@ -400,7 +475,7 @@ function drawRadarChart(divId, w, h) {
             .attr("text-anchor", "middle")
             .attr("dy", "1.5em")
             .attr("transform", function(d, i){return "translate(0, -10)";})
-            .attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-60*Math.sin(i*cfg.radians/total);})
+            .attr("x", function(d, i){return cfg.w/2*(1-cfg.factorLegend*Math.sin(i*cfg.radians/total))-50*Math.sin(i*cfg.radians/total);})
             .attr("y", function(d, i){return cfg.h/2*(1-Math.cos(i*cfg.radians/total))-20*Math.cos(i*cfg.radians/total);});
             
             data.forEach(function(y, x) {
@@ -517,7 +592,7 @@ function drawRadarChart(divId, w, h) {
     var myOptions = {
         w: w
         ,h: h
-        ,ExtraWidthX: 180
+        ,ExtraWidthX: 160
         ,labelScale: 0.7
         ,levels: 5
         ,levelScale: 0.85

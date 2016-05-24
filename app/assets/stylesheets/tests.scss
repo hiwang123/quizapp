@@ -29,7 +29,7 @@ path {
  stroke: #000; 
 }
 .x.axis text{
-	display: none;
+
 }
 .y.axis line, .y.axis path {
   fill: none;
@@ -39,3 +39,44 @@ circle {
   fill: #58CA6A;
   r: 4;
 }
+pre {
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
+}
+
+img {
+	max-width: 100%;
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src:font-url('icomoon.eot?u6y38i');
+  src:font-url('icomoon.eot?u6y38i#iefix') format('embedded-opentype'),
+    font-url('icomoon.svg?u6y38i#icomoon') format('svg'),
+    font-url('icomoon.woff?u6y38i') format('woff'),
+    font-url('icomoon.ttf?u6y38i') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.icon-star:before {
+    content: "\e9d9";
+}
+.icon-star{
+	font-family: 'icomoon';
+}
+input[type='checkbox']{
+	cursor: pointer;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+}
+input[type='radio']{
+	cursor: pointer;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+}
+

@@ -4,8 +4,8 @@ class UsersController < ApplicationController
 	end
 	
 	def create
-		if user_params[:name].blank? or user_params[:email].blank? or user_params[:password].blank?
-			flash[:error] = 'name, email, password cannot be null'
+		if user_params[:name].blank? or user_params[:email].blank? or user_params[:password].blank? or user_params[:school].blank?
+			flash[:error] = 'User informations cannot be null'
 			redirect_to :action => :new
 		elsif not User.where(email: user_params[:email]).empty?
 			flash[:error] = 'This email is registered'
@@ -23,6 +23,7 @@ class UsersController < ApplicationController
 
 	private
 		def user_params
-			params.require(:user).permit(:name, :email, :password)
+			params.require(:user).permit(:name, :email, :school, :password)
 		end
+
 end

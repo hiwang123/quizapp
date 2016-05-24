@@ -2,17 +2,43 @@
   <div class="container">
     
 
-    <h1>Sign up</h1>
+    <img src='/images/signup.png'>
 
     <%= form_for @user, :html => {:class => 'form-inline'} do |f| %>
       <%= f.text_field :name, :placeholder => "Name", class: 'form-control' %>
       <%= f.email_field :email, :placeholder => "Email", class: 'form-control' %>
       <%= f.password_field :password, :placeholder => "Password", class: 'form-control' %>
-      <%= f.submit "Create an account", class: "btn btn-primary" %>
+	  <%= f.text_field :school, :placeholder => "School", class: 'form-control' %>
+      <%= f.submit "建立新帳號", class: "btn btn-primary disabled signup"%>
     <% end %>
 	<% flash.each do |key, value|%> 
 		<div class='alert alert-danger'><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><%= value %></div>
-	<% end %> 
-    
+	<% end %>
+
+    <h3>使用聲明</h3>
+	<div style="border: 1px solid #e5e5e5; height: 250px; width: 100%; max-width: 800px; overflow: auto; padding: 10px;">
+		<p>在使用本App前，請仔細閱讀以下的條款及條件，并在同意該使用規則的前提下使用本網站。 本App之使用聲明有可能會在不預先通告的情况下就進行變更，敬請諒解。</p>
+		<ul><li><p><span style='color:blue;'>關於考題資訊</span></br>本App所刊載之考題有可能在未經預告的情況下變更、追加或中止，敬請諒解。</p></li>
+		<li><p><span style='color:blue;'>關於著作權</span><br>本App所提供的任何資訊，在未經著作權人許可的情况下，不得進行著作權法規定之私人使用範圍以外的使用。</p></li>
+		<li><p><span style='color:blue;'>免責聲明</span><br><ul><li>本公司對本網站資訊之完全性、正確性及有用性等相關事項，不進行任何保證。</li><li>由於使用本網站上的內容或無法使用本網站內容導致使用者遭受損失時，本公司概不負責。</li><li>本公司有可能在未經預告的情況下中斷或中止本App之營運。</li></ul></p></li>
+		<li><p><span style='color:blue;'>連結聲明</span><br><ul><li>可自由連結，但原則上請連結至本網站的主頁。</li><li>若有不當連結的情形，本公司會要求解除連結，敬請見諒。</li><li>以下內容之網站不得連結本App：違反社會公共秩序及善良風俗之內容、侵害隱私權等內容、對本網站造成不利或損害的內容、違反法律法令或條例等內容、成人內容、本網站判斷為不適當的內容</li><li>因連結至本網站而造成的損害本公司概不負責，敬請諒解。</li></ul></p></li>
+		</ul>
+		<strong style='color:orange;'>個人資料使用聲明</strong>
+		<p>貴客戶您好學霸學習App(下稱本App)非常重視您的個人資料保護，因此我們制訂了個資保護聲明，我們於運用您的個人資料均遵守中華民國「個人資料保護法」相關要求，請您閱讀本聲明，以瞭解您的相關權益：</p>
+		<ol><li>當您提供您的個人資料(含姓名、身分證字號、電話及住址等資料，下稱個人資料)時，您的個人資料會被我們蒐集並受到安全的保護，我們會將您所提供資料於本App及其所屬之學霸股份有限公司作為客戶管理、統計調查與分析、資訊與資料庫管理之執行、處理及利用等用途</li>
+		<li>您同意本App以您所提供的個人資料或本App所記錄留存您的電話號碼，用以確認您的身份、與您進行聯絡、並提供您本網站之行銷服務資訊，以及合於其他隱私權保護政策規範之使用方式。</li>
+		<li>您依據個人資料保護法第3條規定，就本App所蒐集、處理及利用之個人資料，享有查詢或請求閱覽、製給複製本補充或更正、請求停止蒐集、處理或利用、請求刪除之權利。若您欲行使前開權利，請直接以書面將您請求的內容，寄送至ＸＸＸ，學霸客服中心收，或來電ＸＸＸ，我們於接獲通知後會儘速與您聯絡，並於確認您的身分無誤後執行處理。</li><li>我們保留您個人資料的期限，以完成本個資使用聲明所載目的所必要的期間為準，但若法律要求或許可更長的期間，則不在此限，而以該法律所規定更長的期間為準；另您可自由選擇是否提供本網站您的個人資料，但若您所提供之個人資料，經檢舉或本App發現不足以確認您的身分真實性或冒用、盜用、資料不實等情形，或者您選擇不提供個人資料時，本App有權暫時停止提供對您的服務，若有不便之處敬請見諒。</li>
+		<li>您瞭解本聲明書符合個人資料保護法及相關法規之要求，具有書面同意本App得依本聲明內容蒐集、處理及利用您的個人資料之效果；您所提供的資料，將依據本App資訊安全政策及規範提供最嚴格的管理及保護。</li></ol>
+	</div>
+	<div class="checkbox">
+		<label><input type="checkbox"> <strong>我同意以上說明</strong></label>
+	</div>
+
   </div>
 </div>
+<script>
+$('input[type=checkbox]').change(function(){
+	if($(this).is(':checked')) $('.signup').removeClass('disabled');
+	else $('.signup').addClass('disabled');
+});
+</script>

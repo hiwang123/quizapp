@@ -1,12 +1,12 @@
 <div class="login">
 	<div class="container">
 
-		<h1>Log in</h1>
+		<img src='images/login.png'>
 			
 		<%= form_for(:session, url: login_path, :html=>{:class => 'form-inline'}) do |f| %> 
 		  <%= f.email_field :email, :placeholder => "Email", class: 'form-control' %> 
 		  <%= f.password_field :password, :placeholder => "Password", class: 'form-control' %> 
-		  <%= f.submit "Log in", class: "btn btn-primary" %>
+		  <%= f.submit "登入", class: "btn btn-primary" %>
 		<% end %>
 		
 		<% flash.each do |key, value|%>                                            

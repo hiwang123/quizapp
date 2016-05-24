@@ -1,17 +1,17 @@
 <div class='container'>
 	<ul class='list-inline'>
-	  <li><h4>Title</h4></li>
+	  <li><h4>標題</h4></li>
 	  <li>
 	    <%= form_for @test, :html => {:class => "form-inline"} do |t| %>
 	      <%= t.text_field :title, class:'form-control' %>
-	      <%= t.submit "Save title", class: 'btn btn-default' %>
+	      <%= t.submit "儲存標題", class: 'btn btn-default' %>
 	    <% end %>
       </li>
-	  <li><h4>Share Code</h4></li>
+	  <li><h4>分享代碼</h4></li>
       <li><strong><%= @test.sharecode %></strong></li>
 	</ul>
 	<ul class='list-inline'>
-	  <li><%= link_to 'New Questions', new_test_question_path(@test), class: 'btn btn-success' %></li>
+	  <li><%= link_to '建立試題', new_test_question_path(@test), class: 'btn btn-success' %></li>
 	</ul>
 	<table class='table'>
 		<% @questions.each do |q| %>
@@ -23,8 +23,8 @@
 			<%= image_tag q.attachment2 %>
 			<div class='form-group'></div>
 			<ul class='list-inline'>
-				<li><%=link_to 'Edit', edit_test_question_path(@test,q), class: 'btn btn-primary' %></li>
-				<li>[<%=link_to 'Delete', test_question_path(@test,q),method: :delete %>]</li>
+				<li><%=link_to '編輯', edit_test_question_path(@test,q), class: 'btn btn-primary' %></li>
+				<li>[<%=link_to '刪除', test_question_path(@test,q),method: :delete %>]</li>
 			</ul>
 		  </td></tr>
 		<% end %>

@@ -1,16 +1,16 @@
 <div class='container'>
 <%= form_for(@test) do |f| %>
   <ul class='list-inline'>
-	<li><h4>Title</h4></li>
+	<li><h4>標題</h4></li>
 	<li><%= f.text_field :title, class: 'form-control', :placeholder => "必填"%></li>
   </ul>
   <ul class='list-inline'>
-	<li><h4>Share Code</h4></li>
+	<li><h4>分享代碼</h4></li>
 	<li><%= f.text_field :sharecode, class: 'form-control', :placeholder => "必填，無法修改"%></li>
   </ul>
   <% flash.each do |key, value|%>
 	<div class='alert alert-danger'><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><%= value %></div>                        
   <% end %>
-  <%= f.submit "Create", :class => "btn btn-default" %>
+  <%= f.submit "建立", :class => "btn btn-default" %>
 <% end %> 
 </div>
