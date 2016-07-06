@@ -34,7 +34,7 @@
           </div>
 		  <p style='margin-top:10px;'>[<label onclick='alert("在作答尚未全部完成前若是按「上一頁」、「重新整理」或「關閉網頁」將會喪失目前作答進度，請多加注意")'><a style='cursor:pointer; padding:10px;'>小提醒</a></label>]</p>
 		</div>
-		<div id='show1'>
+		<div id='show1' style="display: none;">
 		  <span class="star icon-star"></span>
 		  <h4>(<span id='test_id'></span>) 試題</h4>
 		  <pre id='prob'></pre> 
@@ -48,18 +48,16 @@
 			<label class="checkbox-inline"><input type='checkbox' name='m' value='b'>B</label>
 			<label class="checkbox-inline"><input type='checkbox' name='m' value='c'>C</label>
 			<label class="checkbox-inline"><input type='checkbox' name='m' value='d'>D</label>
-			<label class="checkbox-inline"><input type='checkbox' name='m' value='e'>E</label>
 		  </div>
 		  <div id='schoice' class='ansblock' style='font-size:1.3em;'>
 			<label class="radio-inline"><input type='radio' name='s'  value='a'>A</label>
             <label class="radio-inline"><input type='radio' name='s' value='b'>B</label>
             <label class="radio-inline"><input type='radio' name='s' value='c'>C</label>
             <label class="radio-inline"><input type='radio' name='s' value='d'>D</label>
-            <label class="radio-inline"><input type='radio' name='s' value='e'>E</label>
 		  </div>
 		  <div><div class='form-group'></div><button id='control' class="btn btn-primary"></button><img id='res_icon'></div>
 		</div>
-		<div id='show2'>
+		<div id='show2' style="display: none;">
 		  <h4>結果</h4> 
 		  <pre id='result'></pre>
 		  <h4>答案</h4>

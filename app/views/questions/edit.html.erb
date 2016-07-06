@@ -3,10 +3,10 @@
   <div class='form-inline'><h4>形式</h4><%= q.select :typ, [['單選',1],['多選',2],['填充',3]],{},class: 'form-control' %></div>
   <div class='form-inline'><h4>分類</h4><%= q.text_field :tag, class: 'form-control' %></div>
   <div class='span6'><h4>試題</h4><%= q.text_area :prob, class: 'form-control field span12', rows: 5 %></div>
-  <div class='form-inline'><h4>試題圖片</h4><%= q.file_field :attachment1 %></div>
+  <div class='form-inline'><h4>試題圖片</h4><%= image_tag @question.attachment1 %><%= q.file_field :attachment1 %><label><%= q.check_box :remove_attachment1 %>移除圖片</label></div>
   <div class='form-inline'><h4>答案</h4><%= q.text_area :ans, class: 'form-control' %></div>
   <div class='span6'><h4>詳解</h4><%= q.text_area :explain, class: 'form-control field span12', rows: 5%></div><div class='form-group'></div>
-  <div class='form-inline'><h4>詳解圖片</h4><%= q.file_field :attachment2 %></div>
+  <div class='form-inline'><h4>詳解圖片</h4><%= image_tag @question.attachment2 %><%= q.file_field :attachment2 %><label><%= q.check_box :remove_attachment2 %>移除圖片</label></div>
   <div class='form-group'></div>
   <%= q.submit "儲存", :class =>'btn btn-primary' %>
 <% end %>

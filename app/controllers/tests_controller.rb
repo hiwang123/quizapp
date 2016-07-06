@@ -33,6 +33,10 @@ class TestsController < ApplicationController
 	
 	def show
 		@test = Test.find(params[:id])
+		check = current_user.tests.where(id: @test.id)
+		if check.empty?
+			redirect_to :action => :index
+		end
 		@questions = @test.questions
 		@wrongs = Latest.where(uid: current_user.id, qid: @questions.ids).select(:qid)
 		@scores = Score.where(uid: current_user.id, tid: @test.id)	
@@ -42,11 +46,11 @@ class TestsController < ApplicationController
 		@last = Record.where(uid: current_user.id, qid: @questions.ids).order("created_at").last
 		records.each do |r|
 			q = Question.find(r.qid).tag
-			if r.correct and r.created_at.to_i == @last.created_at.to_i
+			if r.correct and @last.created_at.to_i - r.created_at.to_i <= 5
 				make_statics(@statics[3], q)
 				make_statics(@statics[2], q)
 				make_statics(@statics[1], q)
-			elsif r.created_at.to_i == @last.created_at.to_i
+			elsif @last.created_at.to_i - r.created_at.to_i <= 5
 				make_statics(@statics[2], q)
 			elsif r.correct
 				make_statics(@statics[1], q)
